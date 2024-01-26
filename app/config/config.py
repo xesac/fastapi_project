@@ -1,5 +1,6 @@
 from typing import Literal
-
+from secrets import token_bytes
+from base64 import b64encode
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -9,6 +10,9 @@ class Settings(BaseSettings):
     DB_USER: str
     DB_PASS: str
     DB_NAME: str
+
+    SECRET_KEY: str
+    ALGHORITM: str
 
     @property
     def DATABASE_URL(self):
@@ -20,5 +24,3 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env")
 
 settings = Settings()
-
-print(settings.DATABASE_URL)

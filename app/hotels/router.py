@@ -1,12 +1,13 @@
 from fastapi import APIRouter
 from .dao import HotelsDAO
-from .models import Hotels
-
+import asyncio
+from fastapi_cache.decorator import cache
 
 router = APIRouter(
     prefix='/hotels',
     tags=['Отели']
 )
+
 
 @router.get('')
 async def get_hotels():
@@ -16,3 +17,4 @@ async def get_hotels():
 @router.get('/{location}')
 async def get_hotel_by_location(location: str):
     return await HotelsDAO.find_by_location(location)
+

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Набронировал</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .hotel-container {
+            display: flex;
+            margin: 15px;
+            padding: 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+            background-color: #ffffff;
+        }
+        .hotel-container:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .hotel-image {
+            width: 300px;
+            border-radius: 8px;
+        }
+        .hotel-details {
+            margin: 15px;
+            color: #333;
+        }
+        h1 {
+            color: #2e8b57;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        h4 {
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+        p {
+            color: #333;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+        a {
+            text-decoration: none;
+            color: #2e8b57;
+            display: inline-block;
+            padding: 8px 16px;
+            border: 2px solid #2e8b57;
+            border-radius: 4px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        a:hover {
+            background-color: #2e8b57;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        {% for hotel in hotels %}
+        <div class="hotel-container">
+            <img class="hotel-image" src="{{url_for('static', path='images/' + hotel.image_id|string + '.webp')}}" alt="otel">
+            <div class="hotel-details">
+                <h1><b>Отель:</b> {{hotel.name}}</h1>
+                <h4><b>Местоположение:</b> {{hotel.location}}</h4>
+                <p><b>Услуги:</b> {{hotel.services}}</p>
+                <p><b>Количество номеров:</b> {{hotel.rooms_quantity}}</p>
+                <p>{{hotel.image_id}}</p>
+                <a href="">Забронировать сейчас</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

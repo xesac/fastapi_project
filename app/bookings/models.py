@@ -1,7 +1,12 @@
 from app.database.database import Base
-from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy import ForeignKey, Date, Computed
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import ForeignKey, Computed
 from datetime import date
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from app.hotels.rooms.models import Rooms
+    from app.users.models import Users
 
 class Bookings(Base):
     __tablename__ = 'bookings'
@@ -14,3 +19,10 @@ class Bookings(Base):
     price: Mapped[int]
     total_cost: Mapped[int] = mapped_column(Computed('(date_to - date_from) * price'))
     total_days: Mapped[int] = mapped_column(Computed('date_to - date_from'))
+    
+    user: Mapped['Users'] = relationship(back_populates='booking')
+    room: Mapped['Rooms'] = relationship(back_populates='booking')
+
+
+    def __str__(self):
+        return f'Номер брони: {self.id}'

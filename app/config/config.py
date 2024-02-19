@@ -14,6 +14,16 @@ class Settings(BaseSettings):
     SECRET_KEY: str
     ALGHORITM: str
 
+    SMTP_HOST: str
+    SMTP_PORT: str
+    SMTP_USER: str
+    SMTP_PASS:str 
+
+    REDIS_HOST: str
+    REDIS_PORT: str
+
+
+
     @property
     def DATABASE_URL(self):
         return f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"

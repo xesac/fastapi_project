@@ -15,6 +15,8 @@ from redis import asyncio as aioredis
 from app.config.config import settings
 from app.database.database import engine
 from sqladmin import Admin
+from app.admin.auth import authentication_backend
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -31,7 +33,8 @@ async def lifespan(app: FastAPI):
 # создание приложения
 app = FastAPI(lifespan=lifespan)
 
-admin = Admin(app, engine=engine)
+admin = Admin(app, engine=engine, authentication_backend=authentication_backend)
+
 admin.add_view(UsersAdmin)
 admin.add_view(HotelsAdmin)
 admin.add_view(BookingsAdmin)

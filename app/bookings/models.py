@@ -21,7 +21,7 @@ class Bookings(Base):
     total_days: Mapped[int] = mapped_column(Computed('date_to - date_from'))
     
     user: Mapped['Users'] = relationship(back_populates='booking')
-    room: Mapped['Rooms'] = relationship(back_populates='booking')
+    room: Mapped[list['Rooms']] = relationship(back_populates='booking')
 
 
     def __str__(self):

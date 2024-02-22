@@ -13,7 +13,7 @@ class Users(Base):
     email: Mapped[str]
     hashed_password: Mapped[str]
 
-    booking: Mapped['Bookings'] = relationship(back_populates='user')
+    booking: Mapped[list['Bookings']] = relationship(back_populates='user')
 
 
 

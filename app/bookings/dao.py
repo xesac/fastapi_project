@@ -1,11 +1,11 @@
 from app.database.database import async_session_maker
-from sqlalchemy import select, insert, insert, and_, func
+from sqlalchemy import select, insert, insert, and_, func, update
 from app.bookings.models import Bookings
 from app.dao.dao import BaseDAO
 from .models import Bookings
 from datetime import date
 from app.hotels.rooms.models import Rooms
-
+from app.exceptions import RoomCannotBeBooked
 
 class BookingDAO(BaseDAO):
     model = Bookings
@@ -45,6 +45,7 @@ class BookingDAO(BaseDAO):
             rooms_left = rooms_left.scalar()
             
             if rooms_left > 0:
+                #print(rooms_left)
                 get_price = select(Rooms.price).filter_by(id=room_id)
                 price = await session.execute(get_price)
                 price: int = price.scalar()
@@ -56,11 +57,13 @@ class BookingDAO(BaseDAO):
                     price=price
                 ).returning(Bookings)
 
+                stmt = update(Rooms).where(Rooms.id == room_id).values(quantity=Rooms.quantity - 1)
                 new_booking = await session.execute(add_booking)
+                rooms = await session.execute(stmt)
                 await session.commit()
                 return new_booking.scalar()
             else:
-                return None
+                raise RoomCannotBeBooked
 
 
 

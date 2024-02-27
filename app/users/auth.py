@@ -1,5 +1,5 @@
 from passlib.context import CryptContext
-from datetime import datetime, timedelta
+import datetime
 from pydantic import EmailStr
 from app.exceptions import IncorrectEmailOrPasswordException
 from app.users.dao import UsersDAO
@@ -17,7 +17,7 @@ def verify_password(plain_password, hashed_password) -> bool:
 
 def create_access_token(data: dict) -> str:
     to_encode = data.copy()
-    expire = datetime.utcnow() + timedelta(minutes=30)
+    expire = datetime.datetime.now(datetime.UTC) + datetime.timedelta(minutes=30)
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(
         to_encode, settings.SECRET_KEY, settings.ALGHORITM

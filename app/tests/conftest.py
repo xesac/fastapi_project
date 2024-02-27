@@ -1,44 +1,89 @@
-import pytest
-from app.database.database import Base, async_session_maker, engine
-from app.config.config import settings
-from sqlalchemy import insert
-import json
 import asyncio
+import json
+from datetime import datetime
+
+import pytest
+
+from sqlalchemy import insert
+
+from fastapi.testclient import TestClient
+from httpx import AsyncClient
+from app.main import app as fastapi_app
 from app.bookings.models import Bookings
-from app.hotels.rooms.models import Rooms
+from app.config.config import settings
+from app.database.database import Base, async_session_maker, engine
 from app.hotels.models import Hotels
+from app.hotels.rooms.models import Rooms
+
 from app.users.models import Users
 
 
-@pytest.fixture(scope='session', autouse=True)
+@pytest.fixture(scope="session", autouse=True)
 async def prepare_database():
-    assert settings.MODE == 'TEST'
+    assert settings.MODE == "TEST"
+
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
         await conn.run_sync(Base.metadata.create_all)
 
     def open_mock_json(model: str):
-        with open(f'app/tests/mock_{model}.json', 'r') as file:
+        with open(f"app/tests/mock_{model}.json", encoding="utf-8") as file:
             return json.load(file)
-        
-    booking = open_mock_json('bookings')
-    rooms = open_mock_json('rooms')
-    hotels = open_mock_json('hotels')
-    users = open_mock_json('users')
-    print(hotels)
+
+    hotels = open_mock_json("hotels")
+    rooms = open_mock_json("rooms")
+    users = open_mock_json("users")
+    bookings = open_mock_json("bookings")
+
+    
+    for booking in bookings:
+        booking["date_from"] = datetime.strptime(booking["date_from"], "%Y-%m-%d")
+        booking["date_to"] = datetime.strptime(booking["date_to"], "%Y-%m-%d")
+    
 
     async with async_session_maker() as session:
-        add_bookings = insert(Bookings).values(booking)
-        add_rooms = insert(Rooms).values(rooms)
-        add_hotels = insert(Hotels).values(hotels)
-        add_users = insert(Users).values(users)
+        for Model, values in [
+            (Hotels, hotels),
+            (Rooms, rooms),
+            (Users, users),
+            (Bookings, bookings),
+        ]:
+            query = insert(Model).values(values)
+            await session.execute(query)
 
-        lst = [add_bookings, add_hotels, add_rooms, add_users]
-        await [session.execute(req) for req in lst]
         await session.commit()
 
+
+# Взято из документации к pytest-asyncio
 @pytest.fixture(scope='session')
 def event_loop(request):
+    """Create an instance of the default event loop for each test case."""
     loop = asyncio.get_event_loop_policy().new_event_loop()
     yield loop
     loop.close()
+
+
+
+
+@pytest.fixture(scope="function")
+async def ac():
+    async with AsyncClient(app=fastapi_app, base_url="http://test") as ac:
+        yield ac
+
+
+@pytest.fixture(scope="session")
+async def authenticated_ac():
+    async with AsyncClient(app=fastapi_app, base_url="http://test") as ac:
+        await ac.post('/auth/login', json={
+            'email': 'test@test.com',
+            'password': 'test'
+        })
+        print(ac.cookies)
+        assert ac.cookies['booking_access_token']
+        yield ac
+
+
+@pytest.fixture(scope="function")
+async def session():
+    async with async_session_maker() as session:
+        yield session

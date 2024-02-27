@@ -7,16 +7,16 @@ if TYPE_CHECKING:
     from app.hotels.rooms.models import Rooms
 
 class Hotels(Base):
-    __tablename__ = 'hotels'
+    __tablename__ = "hotels"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str]
     location: Mapped[str]
-    services: Mapped[list[str]] = mapped_column(JSON, nullable=True)
+    services: Mapped[list[str]] = mapped_column(JSON)
     rooms_quantity: Mapped[int]
     image_id: Mapped[int]
-
-    room: Mapped[list['Rooms']] = relationship(back_populates='hotel')
+    
+    rooms: Mapped[list["Rooms"]] = relationship(back_populates="hotel")
 
 
 

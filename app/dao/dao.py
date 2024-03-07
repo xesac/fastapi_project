@@ -1,8 +1,6 @@
+from sqlalchemy import insert, select
+
 from app.database.database import async_session_maker
-from sqlalchemy import select, insert
-
-
-
 
 # async def get_async_session():
 #     async with async_session_maker() as async_session:

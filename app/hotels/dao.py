@@ -1,8 +1,9 @@
-from app.dao.dao import BaseDAO
-from .models import Hotels
-from app.database.database import async_session_maker
-from sqlalchemy import select, and_, func
+from sqlalchemy import and_, func, select
 
+from app.dao.dao import BaseDAO
+from app.database.database import async_session_maker
+
+from .models import Hotels
 
 
 class HotelsDAO(BaseDAO):

@@ -1,6 +1,8 @@
-from httpx import AsyncClient
-from app.users.dao import UsersDAO
 import pytest
+from httpx import AsyncClient
+
+from app.users.dao import UsersDAO
+
 
 @pytest.mark.parametrize('id, email, exist', [
     (1, 'test@test.com', True),

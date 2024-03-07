@@ -1,9 +1,17 @@
-from fastapi import Request, Depends
-from jose import jwt, JWTError, ExpiredSignatureError
+from fastapi import Depends, Request
+from jose import ExpiredSignatureError, JWTError, jwt
+
 from app.config.config import settings
+from app.exceptions import (
+    IncorrectTokenException,
+    TokenAbsentException,
+    TokenExpiredException,
+    UserIsNotPresentException,
+)
+
 from .dao import UsersDAO
 from .models import Users
-from app.exceptions import TokenExpiredException, TokenAbsentException, IncorrectTokenException, UserIsNotPresentException
+
 
 def get_token(request: Request):
     token = request.cookies.get("booking_access_token")

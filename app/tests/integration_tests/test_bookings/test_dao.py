@@ -1,7 +1,8 @@
-from app.bookings.dao import BookingDAO
 from datetime import date
+
 import pytest
 
+from app.bookings.dao import BookingDAO
 
 
 @pytest.mark.parametrize('user_id, room_id, date_from, date_to', [
@@ -17,3 +18,4 @@ async def test_add_and_get_booking(user_id: int, room_id: int, date_from: date, 
 
     new_booking = await BookingDAO.find_by_id(response.id)
     assert new_booking is not None
+

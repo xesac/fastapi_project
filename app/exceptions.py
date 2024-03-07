@@ -1,5 +1,6 @@
 from fastapi import HTTPException, status
 
+
 class BaseException(HTTPException):
     status_code = 500
     detail = ''
@@ -46,13 +47,9 @@ class RoomCannotBeBooked(BaseException):
     detail = 'Не осталось свободных номеров'
 
 class WrongDate1(BaseException):
-    status_code = status.HTTP_409_CONFLICT
+    status_code = status.HTTP_400_BAD_REQUEST
     detail = 'Дата выезда должна быть больше даты заезда'
 
 class WrongDate2(BaseException):
-    status_code = status.HTTP_409_CONFLICT
+    status_code = status.HTTP_400_BAD_REQUEST
     detail = 'Забронированных дней не должно быть больше 30'
-
-class WrongDate3(BaseException):
-    status_code = status.HTTP_409_CONFLICT
-    detail = 'Забронированных дней не должно быть меньше 30'

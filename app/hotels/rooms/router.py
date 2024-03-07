@@ -1,14 +1,16 @@
-from fastapi import APIRouter
-from .dao import RoomsDAO
 from datetime import date
+
+from fastapi import APIRouter
+from fastapi.encoders import jsonable_encoder
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
-from .models import Rooms
-from app.database.database import async_session_maker
-from ..models import Hotels
-from app.bookings.models import Bookings
-from fastapi.encoders import jsonable_encoder
 
+from app.bookings.models import Bookings
+from app.database.database import async_session_maker
+
+from ..models import Hotels
+from .dao import RoomsDAO
+from .models import Rooms
 
 router = APIRouter(
     prefix='/hotels',

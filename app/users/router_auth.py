@@ -1,10 +1,14 @@
 from fastapi import APIRouter, Response
-from .schemas import SUserAuth
+
+from app.exceptions import (
+    IncorrectEmailOrPasswordException,
+    IncorrectEmailOrPasswordExceptionNotEn,
+    UserAlreadyExistsException,
+)
+from app.users.auth import authenticate_user, create_access_token, get_password_hash
 from app.users.dao import UsersDAO
-from app.users.auth import get_password_hash, authenticate_user, create_access_token
-from app.exceptions import UserAlreadyExistsException, IncorrectEmailOrPasswordException, IncorrectEmailOrPasswordExceptionNotEn
 
-
+from .schemas import SUserAuth
 
 router = APIRouter(
     prefix='/auth',

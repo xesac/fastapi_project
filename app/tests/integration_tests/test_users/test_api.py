@@ -1,5 +1,6 @@
-from httpx import AsyncClient
 import pytest
+from httpx import AsyncClient
+
 
 @pytest.mark.parametrize('email, password, status_code', [
     ('kotopes@mail.ru', 'kotopes', 200),

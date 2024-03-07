@@ -1,11 +1,14 @@
-from app.task.celery_app import celery
-from PIL import Image
-from pathlib import Path
-from pydantic import EmailStr
 import smtplib
+from pathlib import Path
+
+from fastapi import BackgroundTasks
+from PIL import Image
+from pydantic import EmailStr
+
 from app.config.config import settings
-from fastapi import BackgroundTasks 
+from app.task.celery_app import celery
 from app.task.email_templates import create_booking_confirmation_template
+
 
 @celery.task
 def process_pic(path: str):

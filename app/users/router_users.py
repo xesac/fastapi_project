@@ -1,8 +1,7 @@
 from fastapi import APIRouter, Depends
+
+from .dependencies import get_current_admin_user, get_current_user
 from .models import Users
-from .dependencies import get_current_user, get_current_admin_user
-
-
 
 router = APIRouter(
     prefix='/users',

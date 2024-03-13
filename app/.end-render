@@ -1,0 +1,22 @@
+MODE=DEV
+LOG_LEVEL=INFO
+
+DB_HOST=dpg-cnoof9ol6cac739ad000-a
+DB_PORT=5432
+DB_USER=hesidi
+DB_PASS=9opbjD4piiuGs3yVhdCzylasnqZnDss0
+DB_NAME=booking_db_ilw5
+
+
+SECRET_KEY=ZJ6OJD6/hoJPWOFqi8PDLTYAd2RrEeRpRL6oVSVV/IE=
+ALGHORITM=HS256
+
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=465
+SMTP_USER=knyazev.maksim2852@gmail.com
+SMTP_PASS=kvtq kvjb qzup wchw
+
+REDIS_HOST=red-cnoofm0l6cac739ad2qg
+REDIS_PORT=6379
+
+

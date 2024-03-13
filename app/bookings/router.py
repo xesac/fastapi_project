@@ -7,7 +7,7 @@ from app.exceptions import WrongDate1, WrongDate2
 from app.task.tasks import send_booking_confirmation_email
 from app.users.dependencies import get_current_user
 from app.users.models import Users
-
+from fastapi_versioning import version
 from .dao import BookingDAO
 from .models import Bookings
 from .schemas import SBooking
@@ -16,11 +16,13 @@ router = APIRouter(prefix="/bookings", tags=["Бронирование"])
 
 
 @router.get("")
+@version(1)
 async def get_bookings(user: Users = Depends(get_current_user)) -> list[SBooking]:
     return await BookingDAO.find_all(user_id=user.id)
 
 
 @router.post("")
+@version(1)
 async def add_booking(
     # background_task: BackgroundTasks,
     room_id: int,
@@ -41,17 +43,17 @@ async def add_booking(
             user_id=user.id, room_id=room_id, date_from=date_from, date_to=date_to
         )
 
-        booking_dict = TypeAdapter(SBooking).validate_python(booking).model_dump()
+        #booking_dict = TypeAdapter(SBooking).validate_python(booking).model_dump()
 
         # вариант с celery
-        send_booking_confirmation_email.delay(booking_dict, user.email)
+        #send_booking_confirmation_email.delay(booking_dict, user.email)
 
         # вариант с background Task
         # background_task.add_task(send_booking_confirmation_email, booking_dict, user.email)
-        return booking_dict
-
+        return booking
 
 @router.delete("/{booking_id}")
+@version(1)
 async def delete_booking(
     booking_id: int,
     user: Users = Depends(get_current_user),
